@@ -14,10 +14,16 @@ const app = express();
 const httpServer = http.createServer(app);
 
 // ─── Socket.io Setup ──────────────────────────────────────────────────────────
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+].filter(Boolean);
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
+    credentials: true,
   },
 });
 
@@ -25,7 +31,10 @@ const io = new Server(httpServer, {
 app.set('io', io);
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -48,7 +57,7 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/grand-spic
 
 mongoose.connect(MONGO_URI)
   .then(() => {
-    console.log('✅ MongoDB connected successfully');
+    console.log(' MongoDB connected successfully');
     const PORT = process.env.PORT || 5000;
     httpServer.listen(PORT, () => {
       console.log(`🚀 Grand Spice server running on http://localhost:${PORT}`);
