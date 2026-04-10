@@ -17,6 +17,8 @@ const httpServer = http.createServer(app);
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'http://localhost:5173',
+  'https://grand-spice-frontend.onrender.com',
+  'https://grand-spice-frontend-01.onrender.com',
 ].filter(Boolean);
 
 const io = new Server(httpServer, {
