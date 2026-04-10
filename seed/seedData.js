@@ -3,7 +3,7 @@
  * Run: npm run seed
  * Populates menu items + 15 tables
  */
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
 const mongoose = require('mongoose');
 const MenuItem = require('../models/MenuItem');
 const Table = require('../models/Table');
